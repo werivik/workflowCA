@@ -1,3 +1,8 @@
+import fetch from 'node-fetch';
+import { jest } from '@jest/globals';
+
+global.fetch = fetch;
+
 Object.defineProperty(window, 'localStorage', {
   value: {
     getItem: jest.fn(),
@@ -7,3 +12,5 @@ Object.defineProperty(window, 'localStorage', {
   },
   writable: true,
 });
+
+
