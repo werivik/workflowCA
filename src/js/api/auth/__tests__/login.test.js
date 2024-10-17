@@ -1,12 +1,14 @@
 import { login } from '../../auth/login.js';
+import { logout } from '../../auth/logout.js';
 import * as storage from '../../../storage/index.js';
 
 jest.mock('../../../storage/index.js', () => ({
   save: jest.fn(),
   load: jest.fn(),
+  remove: jest.fn(),
 }));
 
-describe('login', () => {
+describe('auth tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     global.fetch = jest.fn();
@@ -46,5 +48,12 @@ describe('login', () => {
     await expect(login('user@example.com', 'password123')).rejects.toThrow(
       'Network Error',
     );
+  });
+
+  it('clears the token and profile from storage when logging out', () => {
+    logout();
+
+    expect(storage.remove).toHaveBeenCalledWith('token');
+    expect(storage.remove).toHaveBeenCalledWith('profile');
   });
 });

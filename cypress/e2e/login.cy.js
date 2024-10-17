@@ -2,9 +2,11 @@ describe('User Login Test', () => {
   it('Logs in with valid credentials', () => {
     cy.visit('/index.html');
 
+    cy.wait(1000);
+
     cy.get('#registerModal').should('be.visible');
 
-    cy.get('#registerModal .btn-close').first().click();
+    cy.get('#registerModal .btn-close').should('be.visible').first().click();
 
     cy.get('h5#registerModalLabel').should('exist');
 
@@ -13,7 +15,6 @@ describe('User Login Test', () => {
     cy.get('#registerEmail').invoke('hide');
     cy.get('#registerName').invoke('hide');
     cy.get('#registerPassword').invoke('hide');
-    cy.get('#registerModal .btn-close').first().click();
 
     cy.get('.modal-dialog.modal-dialog-centered.modal-dialog-scrollable')
       .find('#loginForm')
@@ -27,13 +28,6 @@ describe('User Login Test', () => {
       });
 
     cy.get('button[data-auth="logout"]').should('be.visible');
-
-    cy.wait(3000);
-
-    cy.get('button[data-auth="logout"]').should('be.visible').click();
-  
-    cy.get('button[data-auth="login"]').should('be.visible');
-    
   });
 
 });
