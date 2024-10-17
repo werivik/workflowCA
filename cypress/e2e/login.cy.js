@@ -20,8 +20,12 @@ describe('User Login Test', () => {
       .find('#loginForm')
       .within(() => {
         cy.get('.modal-body').within(() => {
-        cy.get('input[type="email"]').clear().type('shrek@stud.noroff.no', { force: true });
-        cy.get('input[type="password"]').clear().type('password123', { force: true });
+          cy.get('input[type="email"]')
+            .clear()
+            .type('shrek@stud.noroff.no', { force: true });
+          cy.get('input[type="password"]')
+            .clear()
+            .type('password123', { force: true });
         });
 
         cy.get('.modal-footer button[type="submit"]').click();
@@ -29,13 +33,4 @@ describe('User Login Test', () => {
 
     cy.get('button[data-auth="logout"]').should('be.visible');
   });
-
 });
-
-
-
-
-
-
-
-
