@@ -12,21 +12,30 @@ describe('User Login Test', () => {
 
     cy.get('#registerEmail').invoke('hide');
     cy.get('#registerName').invoke('hide');
+    cy.get('#registerPassword').invoke('hide');
     cy.get('#registerModal .btn-close').first().click();
 
     cy.get('.modal-dialog.modal-dialog-centered.modal-dialog-scrollable')
       .find('#loginForm')
       .within(() => {
         cy.get('.modal-body').within(() => {
-          cy.get('input[type="email"]').clear().type('shrek@stud.noroff.no', { force: true });
-          cy.get('input[type="password"]').clear().type('password123', { force: true });
+        cy.get('input[type="email"]').clear().type('shrek@stud.noroff.no', { force: true });
+        cy.get('input[type="password"]').clear().type('password123', { force: true });
         });
 
         cy.get('.modal-footer button[type="submit"]').click();
       });
 
     cy.get('button[data-auth="logout"]').should('be.visible');
+
+    cy.wait(3000);
+
+    cy.get('button[data-auth="logout"]').should('be.visible').click();
+  
+    cy.get('button[data-auth="login"]').should('be.visible');
+    
   });
+
 });
 
 
