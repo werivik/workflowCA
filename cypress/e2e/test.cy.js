@@ -1,4 +1,5 @@
 describe('User Authentication Flow', () => {
+
     beforeEach(() => {
       cy.visit('/index.html'); 
     });
