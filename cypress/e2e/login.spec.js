@@ -1,6 +1,6 @@
 describe('User Authentication Flow', () => {
   beforeEach(() => {
-    cy.visit('/index.html'); 
+    cy.visit('/index.html');
   });
 
   it('allows the user to log in with valid credentials', () => {
@@ -17,7 +17,9 @@ describe('User Authentication Flow', () => {
     cy.get('input[name="username"]').type('invalidUser');
     cy.get('input[name="password"]').type('invalidPassword');
     cy.get('button[type="submit"]').click();
-    cy.get('.error-message').should('be.visible').and('contain', 'Invalid username or password');
+    cy.get('.error-message')
+      .should('be.visible')
+      .and('contain', 'Invalid username or password');
     cy.get('body').should('not.have.class', 'logged-in');
   });
 
@@ -30,8 +32,3 @@ describe('User Authentication Flow', () => {
     cy.get('body').should('not.have.class', 'logged-in');
   });
 });
-
-
-
-
-

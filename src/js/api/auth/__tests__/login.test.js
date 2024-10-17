@@ -16,8 +16,9 @@ describe('login', () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ accessToken: 'mockToken123', name: 'User' }),
-      })
+        json: () =>
+          Promise.resolve({ accessToken: 'mockToken123', name: 'User' }),
+      }),
     );
 
     const profile = await login('user@example.com', 'password123');
@@ -29,15 +30,21 @@ describe('login', () => {
 
   it('throws an error when provided with invalid credentials', async () => {
     global.fetch.mockImplementationOnce(() =>
-      Promise.resolve({ ok: false, statusText: 'Unauthorized' })
+      Promise.resolve({ ok: false, statusText: 'Unauthorized' }),
     );
 
-    await expect(login('wrong@example.com', 'wrongpassword')).rejects.toThrow('Unauthorized');
+    await expect(login('wrong@example.com', 'wrongpassword')).rejects.toThrow(
+      'Unauthorized',
+    );
   });
 
   it('throws an error when the fetch call fails', async () => {
-    global.fetch.mockImplementationOnce(() => Promise.reject(new Error('Network Error')));
+    global.fetch.mockImplementationOnce(() =>
+      Promise.reject(new Error('Network Error')),
+    );
 
-    await expect(login('user@example.com', 'password123')).rejects.toThrow('Network Error');
+    await expect(login('user@example.com', 'password123')).rejects.toThrow(
+      'Network Error',
+    );
   });
 });

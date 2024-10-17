@@ -1,16 +1,28 @@
-import fetch from 'node-fetch';
-import { jest } from '@jest/globals';
-
-global.fetch = fetch;
-
-Object.defineProperty(window, 'localStorage', {
-  value: {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
-  },
-  writable: true,
-});
-
-
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import pluginJest from "eslint-plugin-jest";
+export default [
+{
+files: ["**/*.js"],
+languageOptions: {
+globals: {
+...globals.browser,
+},
+},
+},
+pluginJs.configs.recommended,
+{
+files: ["**/*.test.js"]
+plugins: {
+jest: pluginJest,
+},
+languageOptions: {
+globals: {
+...globals.jest,
+},
+},
+rules: {
+...pluginJest.configs.recommended.rules,
+},
+},
+];
