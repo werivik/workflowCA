@@ -24,6 +24,9 @@ describe('auth tests', () => {
     await expect(login('wrong@example.com', 'wrongpassword')).rejects.toThrow(
       'Unauthorized',
     );
+
+    expect(storage.save).not.toHaveBeenCalledWith('token', expect.any(String));
+
   });
 
   it('Succsessfully stores a token when provided with valid credentials', async () => {
@@ -56,6 +59,9 @@ describe('auth tests', () => {
     await expect(login('user@example.com', 'password123')).rejects.toThrow(
       'Network Error',
     );
+
+    expect(storage.save).not.toHaveBeenCalledWith('token', expect.any(String));
+
   });
 
   it('Succsessfully clears the user token from storage when logging out', () => {
@@ -75,4 +81,5 @@ describe('auth tests', () => {
     expect(token).toBeNull();
 
   });
+
 });
