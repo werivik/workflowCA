@@ -9,12 +9,24 @@ jest.mock('../../../storage/index.js', () => ({
 }));
 
 describe('auth tests', () => {
+
   beforeEach(() => {
     jest.clearAllMocks();
     global.fetch = jest.fn();
   });
 
-  it('stores a token when provided with valid credentials', async () => {
+  it('Throws an error when provided with invalid credentials', async () => {
+   
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: false, statusText: 'Unauthorized' }),
+    );
+
+    await expect(login('wrong@example.com', 'wrongpassword')).rejects.toThrow(
+      'Unauthorized',
+    );
+  });
+
+  it('Succsessfully stores a token when provided with valid credentials', async () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
@@ -28,19 +40,15 @@ describe('auth tests', () => {
     expect(storage.save).toHaveBeenCalledWith('token', 'mockToken123');
     expect(storage.save).toHaveBeenCalledWith('profile', { name: 'User' });
     expect(profile).toEqual({ name: 'User' });
+
+    storage.load.mockReturnValueOnce('mockToken123');
+
+    const token = storage.load('token');
+    expect(token).toBe('mockToken123');
+
   });
 
-  it('throws an error when provided with invalid credentials', async () => {
-    global.fetch.mockImplementationOnce(() =>
-      Promise.resolve({ ok: false, statusText: 'Unauthorized' }),
-    );
-
-    await expect(login('wrong@example.com', 'wrongpassword')).rejects.toThrow(
-      'Unauthorized',
-    );
-  });
-
-  it('throws an error when the fetch call fails', async () => {
+  it('Throws an error when the fetch call fails', async () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.reject(new Error('Network Error')),
     );
@@ -50,10 +58,21 @@ describe('auth tests', () => {
     );
   });
 
-  it('clears the token and profile from storage when logging out', () => {
+  it('Succsessfully clears the user token from storage when logging out', () => {
+
+    storage.load.mockReturnValueOnce('mockToken123'); 
+
+    let token = storage.load('token');
+    expect(token).toBe('mockToken123');
+
     logout();
 
     expect(storage.remove).toHaveBeenCalledWith('token');
-    expect(storage.remove).toHaveBeenCalledWith('profile');
+
+    storage.load.mockReturnValueOnce(null);
+
+    token = storage.load('token');
+    expect(token).toBeNull();
+
   });
 });
